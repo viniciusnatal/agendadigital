@@ -3,6 +3,7 @@ package com.example.business.impl;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.example.business.BusinessException;
@@ -11,6 +12,7 @@ import com.example.dao.TipoServicoDAO;
 import com.example.dao.impl.TipoServicoDAOImpl;
 import com.example.entity.TipoServico;
 
+@Service
 public class TipoServicoBusinessImpl implements TipoServicoBusiness {
 	private TipoServicoDAO dao = new TipoServicoDAOImpl();
 

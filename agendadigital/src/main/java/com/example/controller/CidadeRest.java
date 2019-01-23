@@ -16,35 +16,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.business.BusinessException;
-import com.example.business.TipoServicoBusiness;
-import com.example.entity.TipoServico;
+import com.example.business.CidadeBusiness;
+import com.example.entity.Cidade;
+import com.example.enums.Estado;
 
-@RestController // Habilita classe como um servico REST -> Recurso
-@RequestMapping(value = "/tiposervico") // Disponibiliza o Nome do Servico na barra de navegacao
+@RestController
+@RequestMapping(value = "/cidade")
+public class CidadeRest {
+	@Autowired
+	private CidadeBusiness business;
 
-public class TipoServicoRest {
-
-	@Autowired // string chamando tiposervicobusiness
-	private TipoServicoBusiness business;
-
-//Metodo Create 
-// Request Body vem em forma de parametro
-//Parametro do tipoServico vem pelo request body -->  
-	@PostMapping() // Sempre ira devolver uma entidade (ResponseEntity)
-	public ResponseEntity<?> create(@RequestBody TipoServico tipoServico) {
+	@PostMapping()
+	public ResponseEntity<?> create(@RequestBody Cidade cidade) {
 
 		try {
-			tipoServico = business.create(tipoServico);// atribuir o Objeto no mesmo objeto+business
-			return ResponseEntity.ok(tipoServico);
+			cidade = business.create(cidade);
+			return ResponseEntity.ok(cidade);
 		} catch (BusinessException e) {
 			e.printStackTrace();
-
 			return ResponseEntity.badRequest().body(e);
+
 		}
 	}
 
-	// Metodo read
-	// lê o método e retorna a lista inteira (lista)
 	@GetMapping
 
 	public ResponseEntity<?> read() {
@@ -60,50 +54,15 @@ public class TipoServicoRest {
 
 	}
 
-//Metodo update
-	@PutMapping
-//Igualar Metodos e parametros
-	public ResponseEntity<?> update(@RequestBody TipoServico tipoServico) {
+	@GetMapping("/filtro/estado")
+
+	public ResponseEntity<?> readByEstado(@PathParam("estado") Estado estado) {
 		try {
-			tipoServico = business.update(tipoServico);
-
-			return ResponseEntity.ok(tipoServico);
-		} catch (BusinessException e) {
-			e.printStackTrace();
-			return ResponseEntity.badRequest().body(e);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.badRequest().body(e);
-		}
-	}
-
-//Metodo delete
-	@DeleteMapping(value = "/{id}")
-//Utilizando o Delete para excluir informacoes com id	
-	public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
-		try {
-			business.delete(id);
-
-			return ResponseEntity.ok().build();
-		} catch (BusinessException e) {
-			e.printStackTrace();
-			return ResponseEntity.badRequest().body(e);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.badRequest().body(e);
-		}
-	}
-
-	// metodo get busca por parametro
-	@GetMapping("/filtro/nome")
-	public ResponseEntity<?> readByName(@PathParam("nome") String nome) {
-
-		try {
-			List<TipoServico> readByName = business.readByName(nome);
-			if (readByName.isEmpty()) {
+			List<Cidade> readByEstado = business.readByEstado(estado);
+			if (readByEstado == null || readByEstado.isEmpty()) {
 				return ResponseEntity.notFound().build();
 			}
-			return ResponseEntity.ok(readByName);
+			return ResponseEntity.ok(readByEstado);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 			return ResponseEntity.notFound().build();
@@ -113,4 +72,34 @@ public class TipoServicoRest {
 		}
 	}
 
+	@PutMapping
+	public ResponseEntity<?> update(@RequestBody Cidade cidade) {
+		try {
+			cidade = business.update(cidade);
+			return ResponseEntity.ok(cidade);
+		} catch (BusinessException e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(e);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(e);
+		}
+	}
+
+	@DeleteMapping(value = "/{codigo}")
+
+	public ResponseEntity<?> delete(@PathVariable("codigo") Integer codigo) {
+		try {
+			business.delete(codigo);
+
+			return ResponseEntity.ok().build();
+		} catch (BusinessException e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(e);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(e);
+		}
+
+	}
 }
