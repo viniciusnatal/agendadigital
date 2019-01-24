@@ -3,7 +3,10 @@ package com.example.business.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.example.business.BusinessException;
@@ -13,11 +16,16 @@ import com.example.dao.impl.TipoServicoDAOImpl;
 import com.example.entity.TipoServico;
 
 @Service
+@Transactional
 public class TipoServicoBusinessImpl implements TipoServicoBusiness {
+
+	@Autowired
 	private TipoServicoDAO dao = new TipoServicoDAOImpl();
 
-	@Override
+	@Override // Propagation serve para declarar cada metodo
+	@Transactional(propagation = Propagation.REQUIRED)
 	public TipoServico create(TipoServico tipoServico) throws BusinessException {
+
 		if (StringUtils.isEmpty(tipoServico.getNome())) {
 			throw new BusinessException("Nome Requerido!");
 
@@ -26,6 +34,7 @@ public class TipoServicoBusinessImpl implements TipoServicoBusiness {
 
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public List<TipoServico> read() throws BusinessException {
 
@@ -33,6 +42,7 @@ public class TipoServicoBusinessImpl implements TipoServicoBusiness {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<TipoServico> readByName(String nome) throws BusinessException {
 		if (StringUtils.isEmpty(nome)) {
 			throw new BusinessException("Nome Requerido!");
@@ -41,6 +51,7 @@ public class TipoServicoBusinessImpl implements TipoServicoBusiness {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
 	public TipoServico update(TipoServico tipoServico) throws BusinessException {
 		if (tipoServico.getCodigo() == null) {
 			throw new BusinessException("Código Requerido! ");
@@ -53,6 +64,7 @@ public class TipoServicoBusinessImpl implements TipoServicoBusiness {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
 	public void delete(Integer id) throws BusinessException {
 		if (id == null) {
 			throw new BusinessException("Código Requerido!");

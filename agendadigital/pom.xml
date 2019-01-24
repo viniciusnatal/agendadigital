@@ -17,8 +17,30 @@
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
-
-	<dependencies>
+	
+	<dependencies> 
+	<dependency>
+	<!-- import do Hibernate -->
+		<groupId>org.hibernate</groupId>
+		<artifactId>hibernate-core</artifactId>
+	</dependency>
+	<dependency>
+	<!-- Interação com o Hibernate  -->
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-orm</artifactId>
+	</dependency>
+	<dependency>
+	<!-- Configuração POM driver para a conexao no banco de dados -->
+		<groupId> com.oracle</groupId>
+		<artifactId>ojdbc6</artifactId>
+		<version>11.2.0.3.0 </version>
+	</dependency>
+	<dependency>
+	<!-- DataSource  -->
+		<groupId>org.apache.tomcat</groupId>
+		<artifactId>tomcat-dbcp</artifactId>
+		<version>9.0.1</version>
+	</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -30,7 +52,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
